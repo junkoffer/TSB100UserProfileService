@@ -8,26 +8,22 @@ using System.Text;
 
 namespace TSB100UserProfileService
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "UserProfileService" in code, svc and config file together.
-    // NOTE: In order to launch WCF Test Client for testing this service, please select UserProfileService.svc or UserProfileService.svc.cs at the Solution Explorer and start debugging.
+    
     public class UserProfileService : IUserProfileService
     {
-        public string GetData(int value)
+        public IEnumerable<string> CreateUser(UserType newUser)
         {
-            return string.Format("You entered: {0}", value);
+            throw new NotImplementedException();
         }
 
-        public CompositeType GetDataUsingDataContract(CompositeType composite)
+        public IEnumerable<string> UpdateUser(UserType user)
         {
-            if (composite == null)
-            {
-                throw new ArgumentNullException("composite");
-            }
-            if (composite.BoolValue)
-            {
-                composite.StringValue += "Suffix";
-            }
-            return composite;
+            throw new NotImplementedException();
+        }
+
+        public UserType GetUser(string username)
+        {
+            throw new NotImplementedException();
         }
     }
 }

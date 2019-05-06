@@ -16,12 +16,12 @@ namespace TSB100UserProfileService
 
         //Måste kolla av mot inloggningstjänst om användarnamnet finns eller inte
         [OperationContract]
-        IEnumerable<string> CreateUser(UserType newUser);
+        IEnumerable<string> CreateUser(User newUser);
 
         [OperationContract]
-        IEnumerable<string> UpdateUser(UserType user);
+        IEnumerable<string> UpdateUser(User user);
 
         [OperationContract]
-        UserType GetUser(string username);
+        User GetUser(string username);
     }
 }

@@ -86,7 +86,6 @@
   <ItemGroup>
     <Compile Include="DataTransferObjects\NewUser.cs" />
     <Compile Include="DataTransferObjects\Review.cs" />
-    <Compile Include="DataTransferObjects\AccountStatus.cs" />
     <Compile Include="Mapping\UserMapper.cs" />
     <Compile Include="UserDb.cs">
       <DependentUpon>UserProfileModel.tt</DependentUpon>

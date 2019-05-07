@@ -15,6 +15,9 @@ namespace TSB100UserProfileService.DataTransferObjects
         public string Username { get; set; }
 
         [DataMember]
+        public int AccountStatus { get; set; }
+
+        [DataMember]
         public string Name { get; set; }
 
         [DataMember]
@@ -44,8 +47,6 @@ namespace TSB100UserProfileService.DataTransferObjects
         [DataMember]
         public IEnumerable<Review> Review { get; set; }
 
-        [DataMember]
-        public IEnumerable<AccountStatus> AccountStatus { get; set; }
     }
 
 }

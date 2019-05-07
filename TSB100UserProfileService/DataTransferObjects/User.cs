@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Security.Policy;
-using System.Web;
 
-namespace TSB100UserProfileService
+namespace TSB100UserProfileService.DataTransferObjects
 {
-   // enum UserStatus { Active, Paused, Blocked}
+    // enum UserStatus { Active, Paused, Blocked}
 
     [DataContract]
     public class User
     {
+        [DataMember]
+        public int Id { get; set; }
+
         [DataMember]
         public string Username { get; set; }
 

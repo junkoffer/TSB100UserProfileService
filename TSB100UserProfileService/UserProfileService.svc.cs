@@ -4,10 +4,8 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.ServiceModel.Web;
-using System.Text;
+using TSB100UserProfileService.DataTransferObjects;
+using TSB100UserProfileService.Mapping;
 
 namespace TSB100UserProfileService
 {
@@ -15,146 +13,116 @@ namespace TSB100UserProfileService
     public class UserProfileService : IUserProfileService
     {
         private UserProfileEntities db = new UserProfileEntities();
+        private UserMapper _mapper = new UserMapper();
 
-        public IEnumerable<string> CreateUser(User newUser)
+        public User CreateUser(NewUser newUser)
         {
-            var errors = new List<string>();
-
-            //TODO: password, username and email should be passed to another service method (login service)
-            //Behöver höra med inloggningsgruppen kring denna funktion
-
+            // TODO: Check login service if username is free or already taken
+            // TODO: password, username and email should be passed to login service for validation and registration
+            // TODO: validate newUser properties that are'nt validated by the login service
             using (db)
             {
-                db.UserDb.Add(new UserDb()
+                var dbUser = new UserDb();
+                db.UserDb.Add(dbUser);
+                _mapper.MapNewUserToModel(newUser, dbUser);
+                db.Entry(dbUser).State = EntityState.Added;
+                if (!UpdateDatabase())
                 {
-                    CreatedDate = DateTime.Now,
-                    Username = newUser.Username,
-                    Address = newUser.Address,
-                    City = newUser.City,
-                    Email = newUser.Email,
-                    FirstName = newUser.Name,
-                    PersonalIdentityNumber = newUser.PersonalCodeNumber,
-                    PhoneNumber = newUser.Phonenumber,
-                    PictureUrl = newUser.Picture,
-                    Surname = newUser.Surname,
-                    ZipCode = newUser.ZipCode
-                });
+                    return null;
+                };
+                // The database has now created an Id, let's copy that to the UserId property
+                dbUser.UserId = dbUser.Id;
 
-                try
-                {
-                    db.SaveChanges();
-                }
-                catch (DbEntityValidationException ex)
-                {
-                    foreach (var entityValidationErrors in ex.EntityValidationErrors)
-                    {
-                        foreach (var validationError in entityValidationErrors.ValidationErrors)
-                        {
-                            errors.Add($"Property: {validationError.PropertyName} Error: { validationError.ErrorMessage}");
-                        }
-                    }
-                }
-                catch (Exception ex) when (
-                    ex is DbUpdateException
-                    )
-                {
-                    errors.Add(ex.Message);
-                }
+                // Return a User object so that one may add more profile data
+                var user = _mapper.MapToWebService(dbUser);
+                return user;
             }
-            return errors;
         }
 
-        public IEnumerable<string> UpdateUser(User user)
+        public bool UpdateUser(User user)
         {
-            //Returnera null ifall någonting går fel - så behöver man kolla av (i gränssnitten) om objektet är null eller inte
-            //Null innebär att någonting har gått fel - men inte vad - indikerar ett exception
-            //Spara-funktioner har bool - true: gick bra, false: någonting gick fel
-            //Tom lista indikerar att ingenting hittades
-
-            var errors = new List<string>();
-
+            // TODO: password, username and email should be passed to another service method (login service)
+            // TODO: validate newUser
             using (db)
             {
                 var dbUser = (from u in db.UserDb
-                             where u.Username == user.Username
-                             select u).FirstOrDefault();
-
+                              where u.Username == user.Username
+                              select u).FirstOrDefault();
                 if (dbUser == null)
                 {
-                    errors.Add("Användaren finns inte registrerad.");
-                    return errors;
+                    return false;
                 }
-
-                dbUser.Address = user.Address ?? string.Empty;
-                dbUser.City = user.City ?? string.Empty;
-                dbUser.Email = user.Email ?? string.Empty;
-                dbUser.FirstName = user.Name ?? string.Empty;
-                dbUser.PersonalIdentityNumber = user.PersonalCodeNumber;
-                dbUser.PhoneNumber = user.Phonenumber;
-                dbUser.Surname = user.Surname ?? string.Empty;
-                dbUser.Username = user.Username ?? string.Empty;
-                dbUser.ZipCode = user.ZipCode;
-                dbUser.PictureUrl = user.Picture ?? string.Empty;
-
+                _mapper.MapUserToModel(user, dbUser);
                 db.Entry(dbUser).State = EntityState.Modified;
-
-                try
-                {
-                    db.SaveChanges();
-                }
-                catch (DbEntityValidationException ex)
-                {
-                    foreach (var entityValidationErrors in ex.EntityValidationErrors)
-                    {
-                        foreach (var validationError in entityValidationErrors.ValidationErrors)
-                        {
-                            errors.Add($"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
-                        }
-                    }
-                }
-                catch (Exception ex) when (
-                    ex is DbUpdateException
-                )
-                {
-                    errors.Add(ex.Message);
-                }
+                return UpdateDatabase();
             }
-            return errors;
         }
 
-        public User GetUser(string username)
+        public User GetUserByUserName(string username)
         {
-            //CurrentStatus bör finnas med: active, blocked, paused m.m.
-
             using (db)
             {
-                try
-                {
-                    var dbUser = (from u in db.UserDb
-                                  where u.Username == username
-                                  select u).FirstOrDefault();
-
-                    var user = new User
-                    {
-                        Address = dbUser?.Address ?? string.Empty,
-                        City = dbUser?.City ?? string.Empty,
-                        Email = dbUser?.Email ?? string.Empty,
-                        Name = dbUser?.FirstName,
-                        PersonalCodeNumber = dbUser?.PersonalIdentityNumber,
-                        Phonenumber = dbUser?.PhoneNumber ?? string.Empty,
-                        Picture = dbUser?.PictureUrl ?? string.Empty,
-                        Surname = dbUser?.Surname ?? string.Empty,
-                        Username = dbUser?.Username ?? string.Empty,
-                        ZipCode = dbUser?.ZipCode
-                    };
-                    return user;
-                }
-                catch
-                {
-                    //TODO: hör med resten av gruppen hur vi ska göra med errors
-                    return null;
-                }
+                var dbUser = (from u in db.UserDb
+                              where u.Username == username
+                              select u).FirstOrDefault();
+                return _mapper.MapToWebService(dbUser);
             }
         }
+
+        public User GetUserByUserId(int userId)
+        {
+            using (db)
+            {
+                var dbUser = (from u in db.UserDb
+                              where u.UserId == userId
+                              select u).FirstOrDefault();
+                return _mapper.MapToWebService(dbUser);
+            }
+        }
+
+        public IEnumerable<User> GetAllUsers()
+        {
+            using (db)
+            {
+                var users = new List<User>();
+                var dbUsers = db.UserDb.ToList();
+                foreach (var dbUser in dbUsers)
+                {
+                    var user = _mapper.MapToWebService(dbUser);
+                    if (user == null)
+                    {
+                        return null;
+                    }
+                    users.Add(user);
+                }
+                return users;
+            }
+        }
+
+        //----------------------------------------------------------------------------------------
+        // Helper methods
+        //----------------------------------------------------------------------------------------
+        #region helperMethods
+
+        private bool UpdateDatabase()
+        {
+            try
+            {
+                db.SaveChanges();
+                return true;
+            }
+            catch (Exception ex) when (
+                ex is DbUpdateException
+                || ex is DbUpdateConcurrencyException
+                || ex is DbEntityValidationException
+                || ex is NotSupportedException
+                || ex is ObjectDisposedException
+                || ex is InvalidOperationException
+                )
+            {
+                return false;
+            }
+        }
+        #endregion
     }
 }

@@ -26,5 +26,6 @@ namespace TSB100UserProfileService
         public string PhoneNumber { get; set; }
         public string Email { get; set; }
         public string PictureUrl { get; set; }
+        public int UserId { get; set; }
     }
 }

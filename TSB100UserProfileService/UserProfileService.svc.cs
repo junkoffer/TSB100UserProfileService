@@ -21,6 +21,8 @@ namespace TSB100UserProfileService
             var errors = new List<string>();
 
             //TODO: password, username and email should be passed to another service method (login service)
+            //Behöver höra med inloggningsgruppen kring denna funktion
+
             using (db)
             {
                 db.UserDb.Add(new UserDb()
@@ -64,6 +66,11 @@ namespace TSB100UserProfileService
 
         public IEnumerable<string> UpdateUser(User user)
         {
+            //Returnera null ifall någonting går fel - så behöver man kolla av (i gränssnitten) om objektet är null eller inte
+            //Null innebär att någonting har gått fel - men inte vad - indikerar ett exception
+            //Spara-funktioner har bool - true: gick bra, false: någonting gick fel
+            //Tom lista indikerar att ingenting hittades
+
             var errors = new List<string>();
 
             using (db)
@@ -101,7 +108,7 @@ namespace TSB100UserProfileService
                     {
                         foreach (var validationError in entityValidationErrors.ValidationErrors)
                         {
-                            errors.Add($"Property: {validationError.PropertyName} Error: { validationError.ErrorMessage}");
+                            errors.Add($"Property: {validationError.PropertyName} Error: {validationError.ErrorMessage}");
                         }
                     }
                 }
@@ -117,6 +124,8 @@ namespace TSB100UserProfileService
 
         public User GetUser(string username)
         {
+            //CurrentStatus bör finnas med: active, blocked, paused m.m.
+
             using (db)
             {
                 try

@@ -1,27 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Security.Policy;
+﻿using System.Collections.Generic;
 using System.ServiceModel;
-using System.ServiceModel.Web;
-using System.Text;
+using TSB100UserProfileService.DataTransferObjects;
 
 namespace TSB100UserProfileService
 {
     [ServiceContract]
     public interface IUserProfileService
     {
-        //TODO: Behöver ha en dialog med överiga tjänster om funktioners input och output
-
-        //Måste kolla av mot inloggningstjänst om användarnamnet finns eller inte
         [OperationContract]
-        IEnumerable<string> CreateUser(User newUser);
+        User CreateUser(NewUser newUser);
 
         [OperationContract]
-        IEnumerable<string> UpdateUser(User user);
+        bool UpdateUser(User user);
 
         [OperationContract]
-        User GetUser(string username);
+        IEnumerable<User> GetAllUsers();
+
+        [OperationContract]
+        User GetUserByUserName(string username);
+
+        [OperationContract]
+        User GetUserByUserId(int userId);
     }
 }

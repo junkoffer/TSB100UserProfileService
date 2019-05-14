@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Linq;
+using Serilog;
 using TSB100UserProfileService.DataTransferObjects;
 using TSB100UserProfileService.Mapping;
 
@@ -19,17 +20,19 @@ namespace TSB100UserProfileService
         {
             // TODO: Check login service if username is free or already taken
             // TODO: password, username and email should be passed to login service for validation and registration
-            // TODO: validate newUser properties that are'nt validated by the login service
+            // TODO: validate newUser properties that aren't validated by the login service
             using (db)
             {
                 var dbUser = new UserDb();
                 db.UserDb.Add(dbUser);
                 _mapper.MapNewUserToModel(newUser, dbUser);
                 db.Entry(dbUser).State = EntityState.Added;
+
                 if (!UpdateDatabase())
                 {
                     return null;
                 };
+
                 // The database has now created an Id, let's copy that to the UserId property
                 dbUser.UserId = dbUser.Id;
 
@@ -48,10 +51,12 @@ namespace TSB100UserProfileService
                 var dbUser = (from u in db.UserDb
                               where u.Username == user.Username
                               select u).FirstOrDefault();
+
                 if (dbUser == null)
                 {
                     return false;
                 }
+
                 _mapper.MapUserToModel(user, dbUser);
                 db.Entry(dbUser).State = EntityState.Modified;
                 return UpdateDatabase();
@@ -65,6 +70,7 @@ namespace TSB100UserProfileService
                 var dbUser = (from u in db.UserDb
                               where u.Username == username
                               select u).FirstOrDefault();
+                Log.Information("Testing logging: Information");
                 return _mapper.MapToWebService(dbUser);
             }
         }
@@ -76,6 +82,7 @@ namespace TSB100UserProfileService
                 var dbUser = (from u in db.UserDb
                               where u.UserId == userId
                               select u).FirstOrDefault();
+
                 return _mapper.MapToWebService(dbUser);
             }
         }
@@ -86,9 +93,11 @@ namespace TSB100UserProfileService
             {
                 var users = new List<User>();
                 var dbUsers = db.UserDb.ToList();
+
                 foreach (var dbUser in dbUsers)
                 {
                     var user = _mapper.MapToWebService(dbUser);
+
                     if (user == null)
                     {
                         return null;

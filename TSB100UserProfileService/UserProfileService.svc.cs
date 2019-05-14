@@ -7,20 +7,35 @@ using System.Linq;
 using Serilog;
 using TSB100UserProfileService.DataTransferObjects;
 using TSB100UserProfileService.Mapping;
+using TSB100UserProfileService.ServiceAdapters;
 
 namespace TSB100UserProfileService
 {
 
     public class UserProfileService : IUserProfileService
     {
-        private UserProfileEntities db = new UserProfileEntities();
-        private UserMapper _mapper = new UserMapper();
+        private UserProfileEntities db;
+        private UserMapper _mapper;
+        private UserValidator _validator;
+
+        public UserProfileService()
+        {
+            db = new UserProfileEntities();
+            _mapper = new UserMapper();
+            var loginAdapter = new LoginAdapter();
+            _validator = new UserValidator(loginAdapter);
+        }
 
         public User CreateUser(NewUser newUser)
         {
             // TODO: Check login service if username is free or already taken
             // TODO: password, username and email should be passed to login service for validation and registration
-            // TODO: validate newUser properties that aren't validated by the login service
+
+            if (!_validator.ValidateNewUser(newUser))
+            {
+                return null;
+            }
+
             using (db)
             {
                 var dbUser = new UserDb();
@@ -46,6 +61,7 @@ namespace TSB100UserProfileService
         {
             // TODO: password, username and email should be passed to another service method (login service)
             // TODO: validate newUser
+
             using (db)
             {
                 var dbUser = (from u in db.UserDb

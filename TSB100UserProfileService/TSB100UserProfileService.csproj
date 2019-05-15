@@ -158,7 +158,7 @@
     <Content Include="Connected Services\LoginServiceRef\TSB100UserProfileService.LoginServiceRef.User.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
-    <Content Include="Connected Services\LoginServiceRef\TSB100UserProfileService.LoginServiceRef.Users.datasource">
+    <Content Include="Connected Services\LoginServiceRef\TSB100UserProfileService.LoginServiceRef.ReturnUser.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <None Include="packages.config" />

@@ -26,32 +26,51 @@ namespace TSB100UserProfileService
             _validator = new UserValidator(loginAdapter);
         }
 
-        public User CreateUser(NewUser newUser)
+        public User CreateUser(NewUser newUserFromWebPage)
         {
             // TODO: Check login service if username is free or already taken
             // TODO: password, username and email should be passed to login service for validation and registration
 
-            //TODO: kolla vad som går fel - "kommer inte åt databasen" om allt inte är ifyllt
-            if (!_validator.ValidateNewUser(newUser))
+            if (!_validator.ValidateNewUser(newUserFromWebPage))
             {
                 return null;
+            }
+
+            int userId;
+
+            using (var loginService = new LoginServiceRef.LoginServiceClient())
+            {
+                var newUser = new LoginServiceRef.NewUser
+                {
+                    Email = newUserFromWebPage.Email,
+                    Firstname = newUserFromWebPage.FirstName,
+                    Surname = newUserFromWebPage.Surname,
+                    Password = newUserFromWebPage.Password,
+                    Username = newUserFromWebPage.Username
+                };
+
+                var returnUser = loginService.CreateUser(newUser);
+
+                if (returnUser == null)
+                {
+                    // Something went wrong
+                    //TODO: create logging
+
+                    return null;
+                }
+
+                // Catches the newly created user's id
+                userId = returnUser.ID;
             }
 
             using (db)
             {
                 var dbUser = new UserDb();
                 db.UserDb.Add(dbUser);
-                _mapper.MapNewUserToModel(newUser, dbUser);
 
-                if (!UpdateDatabase())
-                {
-                    return null;
-                }
+                dbUser.UserId = userId;
+                _mapper.MapNewUserToModel(newUserFromWebPage, dbUser);
 
-                // The database has now created an Id, let's copy that to the UserId property
-                dbUser.UserId = dbUser.Id;
-
-                // Saves the UserId to right column in the database
                 if (!UpdateDatabase())
                 {
                     return null;

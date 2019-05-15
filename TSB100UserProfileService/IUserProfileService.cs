@@ -21,5 +21,7 @@ namespace TSB100UserProfileService
 
         [OperationContract]
         User GetUserByUserId(int userId);
+
+        //TODO: create function for getting logs from today
     }
 }

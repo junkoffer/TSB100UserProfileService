@@ -9,7 +9,12 @@ namespace TSB100UserProfileService.Validation
     {
         internal static void MinMax(List<string> errors, string property, int minLength, int maxLength)
         {
-            //Adds an error message as written below to the error list regarding the strings length
+            if (property == null)
+            {
+                return;
+            }
+
+            //Adds an error message as written below to the error list regarding the strings 
             if (property.Length < minLength)
             {
                 errors.Add($"Validation error: {property}, MinLength: {minLength}, ActualStringLength: {property.Length}");

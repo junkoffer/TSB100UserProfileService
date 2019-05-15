@@ -31,6 +31,7 @@ namespace TSB100UserProfileService
             // TODO: Check login service if username is free or already taken
             // TODO: password, username and email should be passed to login service for validation and registration
 
+            //TODO: kolla vad som går fel - "kommer inte åt databasen" om allt inte är ifyllt
             if (!_validator.ValidateNewUser(newUser))
             {
                 return null;
@@ -70,7 +71,7 @@ namespace TSB100UserProfileService
             using (db)
             {
                 var dbUser = (from u in db.UserDb
-                              where u.Username == user.Username
+                              where u.UserId == user.Id
                               select u).FirstOrDefault();
 
                 if (dbUser == null)
@@ -81,7 +82,7 @@ namespace TSB100UserProfileService
                 _mapper.MapUserToModel(user, dbUser);
                 db.Entry(dbUser).State = EntityState.Modified;
 
-                // Saves the changes that have been made, and returns a true if succeeded, and false if not
+                // Saves the changes that have been made, and returns true if succeeded, and false if not
                 return UpdateDatabase();
             }
         }

@@ -15,8 +15,11 @@ namespace TSB100UserProfileService
     
     public partial class UserProfileEntities : DbContext
     {
-        public UserProfileEntities()
-            : base("name=UserProfileEntities")
+#if DEBUG
+        public UserProfileEntities() : base("name=UserProfileEntities")
+#else
+        public UserProfileEntities() : base("name=UserProfileEntities_Release")
+#endif
         {
         }
     

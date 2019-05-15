@@ -41,15 +41,20 @@ namespace TSB100UserProfileService
                 var dbUser = new UserDb();
                 db.UserDb.Add(dbUser);
                 _mapper.MapNewUserToModel(newUser, dbUser);
-                db.Entry(dbUser).State = EntityState.Added;
 
                 if (!UpdateDatabase())
                 {
                     return null;
-                };
+                }
 
                 // The database has now created an Id, let's copy that to the UserId property
                 dbUser.UserId = dbUser.Id;
+
+                // Saves the UserId to right column in the database
+                if (!UpdateDatabase())
+                {
+                    return null;
+                }
 
                 // Return a User object so that one may add more profile data
                 var user = _mapper.MapToWebService(dbUser);
@@ -75,6 +80,8 @@ namespace TSB100UserProfileService
 
                 _mapper.MapUserToModel(user, dbUser);
                 db.Entry(dbUser).State = EntityState.Modified;
+
+                // Saves the changes that have been made, and returns a true if succeeded, and false if not
                 return UpdateDatabase();
             }
         }
@@ -86,7 +93,9 @@ namespace TSB100UserProfileService
                 var dbUser = (from u in db.UserDb
                               where u.Username == username
                               select u).FirstOrDefault();
+
                 Log.Information("Testing logging: Information");
+
                 return _mapper.MapToWebService(dbUser);
             }
         }

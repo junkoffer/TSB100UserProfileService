@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="LoginService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="http://193.10.202.76/LoginProject/LoginProject/LoginService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="http://193.10.202.76/LoginProject/LoginProject/LoginService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="http://193.10.202.76/LoginProject/LoginProject/LoginService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/LoginProject.Interface" />
+      <xsd:import schemaLocation="http://193.10.202.76/LoginProject/LoginProject/LoginService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/LoginProject" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="ILoginService_CreateUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateUser" />
+  </wsdl:message>
+  <wsdl:message name="ILoginService_CreateUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILoginService_UserLogin_InputMessage">
+    <wsdl:part name="parameters" element="tns:UserLogin" />
+  </wsdl:message>
+  <wsdl:message name="ILoginService_UserLogin_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UserLoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILoginService_AdminLogin_InputMessage">
+    <wsdl:part name="parameters" element="tns:AdminLogin" />
+  </wsdl:message>
+  <wsdl:message name="ILoginService_AdminLogin_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AdminLoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILoginService_DeleteUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteUser" />
+  </wsdl:message>
+  <wsdl:message name="ILoginService_DeleteUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILoginService_CheckUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckUser" />
+  </wsdl:message>
+  <wsdl:message name="ILoginService_CheckUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILoginService_GetFlaggedUsers_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetFlaggedUsers" />
+  </wsdl:message>
+  <wsdl:message name="ILoginService_GetFlaggedUsers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetFlaggedUsersResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILoginService_GetBlockedUsers_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetBlockedUsers" />
+  </wsdl:message>
+  <wsdl:message name="ILoginService_GetBlockedUsers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetBlockedUsersResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILoginService_GetModerators_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetModerators" />
+  </wsdl:message>
+  <wsdl:message name="ILoginService_GetModerators_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetModeratorsResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILoginService_GetActiveUsers_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetActiveUsers" />
+  </wsdl:message>
+  <wsdl:message name="ILoginService_GetActiveUsers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetActiveUsersResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILoginService_FlagUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:FlagUser" />
+  </wsdl:message>
+  <wsdl:message name="ILoginService_FlagUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:FlagUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILoginService_BlockUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:BlockUser" />
+  </wsdl:message>
+  <wsdl:message name="ILoginService_BlockUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BlockUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="ILoginService_AssignRole_InputMessage">
+    <wsdl:part name="parameters" element="tns:AssignRole" />
+  </wsdl:message>
+  <wsdl:message name="ILoginService_AssignRole_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AssignRoleResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ILoginService">
+    <wsdl:operation name="CreateUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILoginService/CreateUser" message="tns:ILoginService_CreateUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILoginService/CreateUserResponse" message="tns:ILoginService_CreateUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UserLogin">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILoginService/UserLogin" message="tns:ILoginService_UserLogin_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILoginService/UserLoginResponse" message="tns:ILoginService_UserLogin_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AdminLogin">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILoginService/AdminLogin" message="tns:ILoginService_AdminLogin_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILoginService/AdminLoginResponse" message="tns:ILoginService_AdminLogin_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILoginService/DeleteUser" message="tns:ILoginService_DeleteUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILoginService/DeleteUserResponse" message="tns:ILoginService_DeleteUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILoginService/CheckUser" message="tns:ILoginService_CheckUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILoginService/CheckUserResponse" message="tns:ILoginService_CheckUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFlaggedUsers">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILoginService/GetFlaggedUsers" message="tns:ILoginService_GetFlaggedUsers_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILoginService/GetFlaggedUsersResponse" message="tns:ILoginService_GetFlaggedUsers_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetBlockedUsers">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILoginService/GetBlockedUsers" message="tns:ILoginService_GetBlockedUsers_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILoginService/GetBlockedUsersResponse" message="tns:ILoginService_GetBlockedUsers_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetModerators">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILoginService/GetModerators" message="tns:ILoginService_GetModerators_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILoginService/GetModeratorsResponse" message="tns:ILoginService_GetModerators_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetActiveUsers">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILoginService/GetActiveUsers" message="tns:ILoginService_GetActiveUsers_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILoginService/GetActiveUsersResponse" message="tns:ILoginService_GetActiveUsers_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="FlagUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILoginService/FlagUser" message="tns:ILoginService_FlagUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILoginService/FlagUserResponse" message="tns:ILoginService_FlagUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BlockUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILoginService/BlockUser" message="tns:ILoginService_BlockUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILoginService/BlockUserResponse" message="tns:ILoginService_BlockUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AssignRole">
+      <wsdl:input wsaw:Action="http://tempuri.org/ILoginService/AssignRole" message="tns:ILoginService_AssignRole_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ILoginService/AssignRoleResponse" message="tns:ILoginService_AssignRole_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BasicHttpBinding_ILoginService" type="tns:ILoginService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CreateUser">
+      <soap:operation soapAction="http://tempuri.org/ILoginService/CreateUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UserLogin">
+      <soap:operation soapAction="http://tempuri.org/ILoginService/UserLogin" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AdminLogin">
+      <soap:operation soapAction="http://tempuri.org/ILoginService/AdminLogin" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteUser">
+      <soap:operation soapAction="http://tempuri.org/ILoginService/DeleteUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckUser">
+      <soap:operation soapAction="http://tempuri.org/ILoginService/CheckUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFlaggedUsers">
+      <soap:operation soapAction="http://tempuri.org/ILoginService/GetFlaggedUsers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetBlockedUsers">
+      <soap:operation soapAction="http://tempuri.org/ILoginService/GetBlockedUsers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetModerators">
+      <soap:operation soapAction="http://tempuri.org/ILoginService/GetModerators" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetActiveUsers">
+      <soap:operation soapAction="http://tempuri.org/ILoginService/GetActiveUsers" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FlagUser">
+      <soap:operation soapAction="http://tempuri.org/ILoginService/FlagUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BlockUser">
+      <soap:operation soapAction="http://tempuri.org/ILoginService/BlockUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AssignRole">
+      <soap:operation soapAction="http://tempuri.org/ILoginService/AssignRole" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="LoginService">
+    <wsdl:port name="BasicHttpBinding_ILoginService" binding="tns:BasicHttpBinding_ILoginService">
+      <soap:address location="http://193.10.202.76/LoginProject/LoginProject/LoginService.svc" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

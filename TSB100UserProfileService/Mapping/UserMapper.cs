@@ -37,6 +37,7 @@ namespace TSB100UserProfileService.Mapping
         {
             if (userDb == null)
             {
+                // TODO: Create logging (debug)
                 return null;
             }
             var user = new User

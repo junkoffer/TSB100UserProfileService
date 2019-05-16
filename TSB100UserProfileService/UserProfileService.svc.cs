@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Linq;
+using Newtonsoft.Json;
 using Serilog;
 using TSB100UserProfileService.DataTransferObjects;
 using TSB100UserProfileService.Mapping;
@@ -28,9 +29,6 @@ namespace TSB100UserProfileService
 
         public User CreateUser(NewUser newUserFromWebPage)
         {
-            // TODO: Check login service if username is free or already taken
-            // TODO: password, username and email should be passed to login service for validation and registration
-
             if (!_validator.ValidateNewUser(newUserFromWebPage))
             {
                 return null;
@@ -53,8 +51,8 @@ namespace TSB100UserProfileService
 
                 if (returnUser == null)
                 {
-                    // Something went wrong
-                    //TODO: create logging
+                    // Logging that something went wrong when trying to save the new user in the other service
+                    Log.Warning($"An attempt to create an account with the following values failed: {JsonConvert.SerializeObject(newUser)}");
 
                     return null;
                 }
@@ -73,6 +71,9 @@ namespace TSB100UserProfileService
 
                 if (!UpdateDatabase())
                 {
+                    // Logging that something went wrong when trying to save the new user in the other service
+                    Log.Warning($"An attempt to create a profile with the following values failed: {JsonConvert.SerializeObject(newUserFromWebPage)}");
+
                     return null;
                 }
 
@@ -84,8 +85,13 @@ namespace TSB100UserProfileService
 
         public bool UpdateUser(User user)
         {
-            // TODO: password, username and email should be passed to another service method (login service)
-            // TODO: validate newUser
+            // TODO: Login Service does not have an UpdateUser() function - cannot pass parameters (password, email, username, first and lastname) to that service, so that they are updated there
+            // TODO: validate like with NewUser (but with the User class)
+
+            if (!_validator.ValidateUser(user))
+            {
+                return false;
+            }
 
             using (db)
             {
@@ -95,6 +101,7 @@ namespace TSB100UserProfileService
 
                 if (dbUser == null)
                 {
+                    // TODO: Create logging
                     return false;
                 }
 
@@ -114,8 +121,7 @@ namespace TSB100UserProfileService
                               where u.Username == username
                               select u).FirstOrDefault();
 
-                Log.Information("Testing logging: Information");
-
+                // TODO: Create logging (if null)
                 return _mapper.MapToWebService(dbUser);
             }
         }
@@ -127,6 +133,8 @@ namespace TSB100UserProfileService
                 var dbUser = (from u in db.UserDb
                               where u.UserId == userId
                               select u).FirstOrDefault();
+
+                // TODO: Create logging (if null)
 
                 return _mapper.MapToWebService(dbUser);
             }
@@ -145,6 +153,7 @@ namespace TSB100UserProfileService
 
                     if (user == null)
                     {
+                        // TODO: Create logging
                         return null;
                     }
                     users.Add(user);
@@ -174,6 +183,7 @@ namespace TSB100UserProfileService
                 || ex is InvalidOperationException
                 )
             {
+                //TODO: Create logging
                 return false;
             }
         }

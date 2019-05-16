@@ -64,7 +64,7 @@ namespace TSB100UserProfileService
                 // Saves the errors as a long string
                 Log.Debug(JsonConvert.SerializeObject(errors));
             }
-            return (errors.Count > 0);
+            return true;
         }
     }
 }

@@ -258,7 +258,13 @@ namespace TSB100UserProfileService
                               select u).FirstOrDefault();
                 if (dbUser == null)
                 {
-                    Log.Warning($"In USerProfileService.GetUserByUserName(): No user found with userName {userName}");
+                    dbUser = (from u in db.UserDb
+                              where u.Email == userName
+                              select u).FirstOrDefault();
+                    if (dbUser == null)
+                    {
+                        Log.Warning($"In USerProfileService.GetUserByUserName(): No user found with userName or email {userName}");
+                    }
                 }
                 return _mapper.MapToWebService(dbUser);
             }
